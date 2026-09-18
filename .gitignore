@@ -21,4 +21,8 @@ env/
 venv/
 ENV/
 
+#db file
+db_conncetion.py
+test.py
+
 
