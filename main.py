@@ -4,6 +4,9 @@ from collection import Collection
 from storage import Storage
 import psycopg2
 from transformation import Transformation
+import asyncio
+from logger_config import setup_logger
+logger = setup_logger(__name__)
 
 
 load_dotenv()
@@ -28,12 +31,26 @@ conn = psycopg2.connect(
 c1 = Collection(iss_api_url, "data.json")
 s1 = Storage(conn,"data.json")
 t1 = Transformation(conn, geocode_api_key)
-print(t1)
+
+
+try:
+    async def main():
+
+        conc = await asyncio.gather(
+            c1.data_lake(),
+            s1.store_to_db(),
+            t1.run()
+
+        )
+
+
+    while True:
+        asyncio.run(main())
+except KeyboardInterrupt as k:
+    logger.error(f'the programme was stopped by admin {k}')
 
 # c1.data_lake()
 # s1.store_to_db()
-
-
 
 
 

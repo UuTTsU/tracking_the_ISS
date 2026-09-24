@@ -1,12 +1,13 @@
 import ast
 import json
 import time
+import asyncio
 class Storage:
     def __init__(self, db_conn, file_path):
         self.db_conn = db_conn
         self.file_path = file_path
 
-    def store_to_db(self):
+    async def store_to_db(self):
         while True:
             cur = self.db_conn.cursor()
             with (open(self.file_path) as f):
@@ -28,4 +29,4 @@ class Storage:
                                 """, values)
 
                     self.db_conn.commit()
-            time.sleep(5)
+            await asyncio.sleep(5)

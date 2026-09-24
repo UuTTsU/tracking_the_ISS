@@ -1,12 +1,15 @@
 from opencage.geocoder import OpenCageGeocode
 from pprint import pprint
+import asyncio
+from logger_config import setup_logger
+logger = setup_logger(__name__)
 
 class Transformation:
     def __init__(self, db_conn, geocode_api):
         self.__db_conn = db_conn
         self.__geocode_api = geocode_api
 
-    def where_is_iss(self):
+    async def where_is_iss(self):
         cur = self.__db_conn.cursor()
 
         cur.execute("""
@@ -22,7 +25,7 @@ class Transformation:
         result = geocoder.reverse_geocode(latitude, longitude)
         return result[0]["formatted"]
 
-    def distance_iss(self):
+    async def distance_iss(self):
         cur = self.__db_conn.cursor()
         cur.execute("""
                SELECT
@@ -35,7 +38,8 @@ class Transformation:
                ORDER BY timestamp_iss desc limit 1
         """)
         distances = cur.fetchall()
-        values = (distances[0][0],distances[0][3],distances[0][4])
+        location = await self.where_is_iss()
+        values = (distances[0][0],distances[0][3],location)
         cur.execute("""
 
                     INSERT INTO ISS_Info (recordid, distance, whereIsIt)
@@ -43,11 +47,18 @@ class Transformation:
                     """, values)
 
         self.__db_conn.commit()
-        return distances[0][4]
+        return location, distances[0][4]
 
-    def __str__(self) -> str:
-        return (f"Currently satelite is above {self.where_is_iss()} "
-                f"it has moved {self.distance_iss()} km from the last position")
+    async def run(self):
+        while True:
+            location, distance = await self.distance_iss()
+            logger.info(f"ISS has moved {distance} km from the last position, currently it is at {location}")
+            await asyncio.sleep(10)
+
+    # def __str__(self) -> str:
+    #     return (f"Currently satelite is above {self.where_is_iss()} "
+    #             f"it has moved {self.distance_iss()} km from the last position")
+
 
 
 

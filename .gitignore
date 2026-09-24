@@ -10,7 +10,7 @@ __pycache__/
 #Logs
 *.log
 logs/
-
+logger_config.py
 # pyenv
 .python-version
 
@@ -21,8 +21,8 @@ env/
 venv/
 ENV/
 
-#db file
-db_conncetion.py
-test.py
+
+
+
 
 
