@@ -49,6 +49,9 @@ try:
 except KeyboardInterrupt as k:
     logger.error(f'the programme was stopped by admin {k}')
 
+
+logger.info("Reviewing Project. . . ")
+
 # c1.data_lake()
 # s1.store_to_db()
 
