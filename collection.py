@@ -20,3 +20,7 @@ class Collection:
                 json.dump(data, json_data_file, indent=4)
 
             await asyncio.sleep(5)
+
+
+
+logger.info("Reviewing Project. . . ")

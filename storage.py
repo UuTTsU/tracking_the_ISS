@@ -30,3 +30,6 @@ class Storage:
 
                     self.db_conn.commit()
             await asyncio.sleep(5)
+
+
+logger.info("Reviewing Project. . . ")
