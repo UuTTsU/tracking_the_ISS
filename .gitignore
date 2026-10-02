@@ -10,7 +10,7 @@ __pycache__/
 #Logs
 *.log
 logs/
-
+logger_config.py
 # pyenv
 .python-version
 
@@ -20,5 +20,9 @@ logs/
 env/
 venv/
 ENV/
+
+
+
+
 
 
