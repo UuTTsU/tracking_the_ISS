@@ -10,10 +10,10 @@ class Storage:
     async def store_to_db(self):
         while True:
             cur = self.db_conn.cursor()
-            with (open(self.file_path) as f):
+            with open(self.file_path) as f:
                 data = json.load(f)
                 for value in data["Satellite Positions"]:
-                    i = ast.literal_eval(value)
+                    i = value
 
                     values = (i["name"], i["id"], i["latitude"], i["longitude"], i["altitude"], i["velocity"],
                               i["visibility"], i["footprint"], i["timestamp"], i["daynum"], i["solar_lat"],

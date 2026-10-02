@@ -12,11 +12,27 @@ class Collection:
         while True:
             response = requests.get(self.url)
             json_data_api = json.dumps(response.json(), indent=4)
-            with open(self.file_path) as json_data_file:
+            with open (self.file_path) as json_data_file:
                 data = json.load(json_data_file)
 
-            data["Satellite Positions"].append(json_data_api)
+            data["Satellite Positions"].append(response.json())
             with open(self.file_path, "w") as json_data_file:
                 json.dump(data, json_data_file, indent=4)
 
             await asyncio.sleep(5)
+
+
+
+
+    # async def data_lake(self):
+    #     while True:
+    #         response = requests.get(self.url)
+    #         json_data_api = json.dumps(response.json(), indent=4)
+    #         with open(self.file_path) as json_data_file:
+    #             data = json.load(json_data_file)
+    #
+    #         data["Satellite Positions"].append(json_data_api)
+    #         with open(self.file_path, "w") as json_data_file:
+    #             json.dump(data, json_data_file, indent=4)
+    #
+    #         await asyncio.sleep(5)
