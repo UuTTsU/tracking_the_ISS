@@ -17,22 +17,20 @@ iss_api_url = os.getenv("ISS_API_URL")
 
 conn=psycopg2.connect(db_url)
 
-c1 = Collection(iss_api_url, "data.json")
-s1 = Storage(conn,"data.json")
-t1 = Transformation(conn, geocode_api_key)
+data_collector = Collection(iss_api_url, "data.json")
+data_storage= Storage(conn,"data.json")
+data_transformer = Transformation(conn, geocode_api_key)
 
+
+async def main():
+    conc = await asyncio.gather(
+        data_collector.data_lake(),
+        data_storage.store_to_db(),
+        data_transformer.run()
+
+    )
 
 try:
-    async def main():
-
-        conc = await asyncio.gather(
-            c1.data_lake(),
-            s1.store_to_db(),
-            t1.run()
-
-        )
-
-
     while True:
         asyncio.run(main())
 except KeyboardInterrupt as k:
